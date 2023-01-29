@@ -2009,6 +2009,7 @@ class MDFloatingActionButtonSpeedDial(
         self.register_event_type("on_close")
         self.register_event_type("on_press_stack_button")
         self.register_event_type("on_release_stack_button")
+        self.root_button_timer = None
         Window.bind(on_resize=self._update_pos_buttons)
 
     def on_open(self, *args):
@@ -2209,6 +2210,7 @@ class MDFloatingActionButtonSpeedDial(
         """
 
         def set_pos_root_button(*args):
+
             if self.anchor == "right":
                 instance_floating_root_button.y = dp(20)
                 instance_floating_root_button.x = self.parent.width - (
@@ -2217,13 +2219,14 @@ class MDFloatingActionButtonSpeedDial(
 
                 if instance_floating_root_button.x > 100:
                     if self.root_button_timer:
-                        print(f"*** CANCELLING TIMER")
+                        #print(f"*** CANCELLING TIMER")
                         self.root_button_timer.cancel()
                         self.root_button_timer = None
 
-                if instance_floating_root_button.x < 100:
-                    print(f"**** INSTANCE VALUE X IS : {instance_floating_root_button.x}")
-                    self.root_button_timer = Clock.schedule_interval(set_pos_root_button, 1)
+                #print(f"**** INSTANCE VALUE X IS : {instance_floating_root_button.x}")
+                if instance_floating_root_button.x < 100 and not self.root_button_timer:
+
+                    self.root_button_timer = Clock.schedule_interval(set_pos_root_button, 2)
 
 
         Clock.schedule_once(set_pos_root_button)
